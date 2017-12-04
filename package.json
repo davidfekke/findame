@@ -11,5 +11,8 @@
     "Doctor"
   ],
   "author": "David Fekke <david@fekke.com>",
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "dependencies": {
+    "node-geocoder": "^3.21.1"
+  }
 }

@@ -1,0 +1,15 @@
+{
+  "name": "findame",
+  "version": "1.0.0",
+  "description": "A service to find an aviation medical doctor",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "AME",
+    "Doctor"
+  ],
+  "author": "David Fekke <david@fekke.com>",
+  "license": "Apache-2.0"
+}

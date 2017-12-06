@@ -14,26 +14,53 @@ const options = {
 
 
 const geocoder = NodeGeocoder(options);
-// const jaxDoctors = doctors.tableData.filter(r => r.city.toUpperCase() === 'Jacksonville'.toUpperCase());
-const jaxDoctors = doctors.tableData; // .filter(r => r.city.toUpperCase() === 'Jacksonville'.toUpperCase());
 
-const requests = jaxDoctors.map(doctor => { 
-    return geocoder.geocode(doctor.fullAddress)
-        .then(geo => {
+console.log('Total AMEs ' + doctors.tableData.length);
+const usDoctors = doctors.tableData.filter(r => r.country.toUpperCase() === 'United States'.toUpperCase());
+console.log('US AMEs ' + usDoctors.length);
+fs.writeFile('./usdoctors.json', JSON.stringify(usDoctors), (err, result) => {
+    if (err) console.error(err);
+});
+
+//let geo = [{ latitude: 1.0000, longitude: -1.0000 }];
+//let interval = setInterval(processDoctors, 500);
+
+function processDoctors() {
+    if (usDoctors.length === 0) {
+        clearInterval(interval);
+        fs.writeFile('./doctorlatnlong.json', JSON.stringify(geoDoctors), (err, result) => {
+            if (err) console.error(err);
+        });
+    } else {
+        let pop = usDoctors.pop();
+        geocoder.geocode(pop.fullAddress).then(geo => {
             if (geo && geo[0]) {
-                doctor.latitude = geo[0].latitude;
-                doctor.longitude = geo[0].longitude;
+                pop.latitude = geo[0].latitude;
+                pop.longitude = geo[0].longitude;
             }
-            return doctor;
-        }).catch(err => console.error(err));
-});
+            geoDoctors.push(pop);
+            console.log(pop);
+        });
+    }
+}
 
-Promise.all(requests).then(res => { 
-    geoDoctors.push(...res);
-    fs.writeFile('./doctorlatnlong.json', JSON.stringify(geoDoctors), (err, result) => {
-        if (err) console.error(err);
-        console.log(result);
-    });
-    //console.log(geoDoctors);
-});
-//console.log(jaxDoctors);
+//const jaxDoctors = doctors.tableData; // .filter(r => r.city.toUpperCase() === 'Jacksonville'.toUpperCase());
+
+// const requests = jaxDoctors.map(doctor => { 
+//     return geocoder.geocode(doctor.fullAddress)
+//         .then(geo => {
+//             if (geo && geo[0]) {
+//                 doctor.latitude = geo[0].latitude;
+//                 doctor.longitude = geo[0].longitude;
+//             }
+//             return doctor;
+//         }).catch(err => console.error(err));
+// });
+
+// Promise.all(requests).then(res => { 
+//     geoDoctors.push(...res);
+//     fs.writeFile('./doctorlatnlong.json', JSON.stringify(geoDoctors), (err, result) => {
+//         if (err) console.error(err);
+//         console.log(result);
+//     });
+// });
